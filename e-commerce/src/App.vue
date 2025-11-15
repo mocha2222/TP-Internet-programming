@@ -1,83 +1,79 @@
 <script>
-
-import Promotion from './components/Promotion.vue';
+import Promotion from './components/Promotion.vue'
 import Category from './components/Category.vue'
-import axios from 'axios'
-export default{
-  components:{
-    Promotion,
-    Category
-  },
+import { useProductStore } from '@/stores/product'
+import { mapState } from 'pinia'
+
+export default {
+  components: { Promotion, Category },
+
   data() {
-    return { 
-      categories:[],
-      promotions:[]
+    return {
+      currentGroupName: 'Group A'
     }
   },
-  methods: {
-    fetchCategories() {
-      axios
-        .get("http://localhost:3000/api/categories")
-        .then((response) => {
-          this.categories = response.data
-          console.log('fetch category successfull')
-          console.log(this.categories)
-        })
-        .catch((err) => {
-          console.log("Error loading categories:", err)
-        })
-    },
 
-    fetchPromotions() {
-      axios
-        .get("http://localhost:3000/api/promotions")
-        .then((response) => {
-          this.promotions = response.data
-          console.log("fetch promotion successfull")
-          console.log(this.promotions)
-        })
-        .catch((err) => {
-          console.log("Error loading promotions:", err)
-        })
-    }
+  computed: {
+    ...mapState(useProductStore, {
+      popularProducts: 'getPopularProducts',
+      categories(store) {
+        return store.getCategoriesByGroup(this.currentGroupName)
+      },
+      promotions(store) {
+        return store.promotions
+      }
+      productsByCategory(store) {
+        return store.getProductsByCategory(this.currentCategoryId)
+      }
+      productsByGroup(store) {
+        return store.getProductsByGroup(this.currentGroupName)
+      }
+    })
   },
-  mounted () {
-    this.fetchCategories()
-    this.fetchPromotions()
+  mounted() {
+    const store = useProductStore()
+    store.loadAll()
   }
-
 }
-
 </script>
 
 <template>
   <div>
+    <h2>Categories</h2>
     <div class="category">
       <Category
         v-for="category in categories"
-        :key="category.name"
+        :key="category.id"
         :category="category"
       />
     </div>
 
+    <h2>Promotions</h2>
     <div class="promotion">
       <Promotion
         v-for="promotion in promotions"
-        :key="promotion.title"
+        :key="promotion.id"
         :promotion="promotion"
       />
     </div>
 
-
+    <h2>Popular Products</h2>
+    <div class="promotion">
+      <Promotion
+        v-for="product in popularProducts"
+        :key="product.id"
+        :promotion="product"
+      />
+    </div>
   </div>
- 
 </template>
 
-<style scoped> 
-  .category, .promotion { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 10px; padding: 10px; 
-    } 
+<style scoped>
+.category, .promotion { 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
 </style>

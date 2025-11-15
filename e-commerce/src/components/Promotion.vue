@@ -1,81 +1,52 @@
-<script>
-import Button from './Button.vue'
+<template>
+  <div class="catCard" :style="{ backgroundColor: category.color }">
+    <img class="catImg" :src="imageUrl" :alt="category.name">
+    <h3 class="catName">{{ category.name }}</h3>
+    <p class="catQuant">{{ category.productCount }} items</p>
+  </div>
+</template>
 
+<script>
 export default {
-    
-  components: {
-    Button
-  },
   props: {
-    promotion: {
+    category: {
       type: Object,
       required: true
     }
   },
-
-  methods: {
-    shopNow(promotion) {
-      alert("Let's shop: " + promotion.title)
+  computed: {
+    imageUrl() {
+      if (this.category.image instanceof File || this.category.image instanceof Blob) {
+        return URL.createObjectURL(this.category.image)
+      }
+      return this.category.image
     }
   }
 }
 </script>
 
-
-<template>
-    
-    <div class="promotion-banner" :style="{ backgroundColor: promotion.color }">
-        <div class="text-wrapper">
-            <h2>{{ promotion.title}}</h2>
-            <Button :style="{backgroundColor: promotion.buttonColor}" @click="shopNow(promotion)"></Button>
-        </div>
-        <div class="image-wrapper">
-            <img :src="promotion.image" alt="Img">
-        </div>
-    </div>
-  
-</template>
-
 <style scoped>
-    .promotion-banner {
-        width: 400px;
-        height: 300px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 30px;
-        border-radius: 10px;
-        height: 180px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .text-wrapper {
-        max-width: 50%;
-        z-index: 10;
-    }
-
-    h2 {
-        font-size: 24px;
-        font-weight: bold;
-        line-height: 1.2;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    .image-wrapper {
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 80%;
-        padding: 20px;
-    }
-
-    img {
-        height: 100%;
-        width: auto;
-        border-radius: 0 10px 10px 0;
-
-
-    }
+.catCard {
+  width: 136px;
+  height: 167px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.catImg {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+}
+.catName {
+  font-size: 14px;
+  font-weight: 600;
+}
+.catQuant {
+  font-size: 12px;
+  color: #777;
+}
 </style>
