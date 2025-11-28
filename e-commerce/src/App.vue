@@ -1,11 +1,14 @@
 <script>
 import Promotion from './components/Promotion.vue'
 import Category from './components/Category.vue'
-import { useProductStore } from '@/stores/product'
+import Menu from './components/Menu.vue'
+import Product from './components/Product.vue'
+
+import { useProductStore } from '@/store/useProductStore'
 import { mapState } from 'pinia'
 
 export default {
-  components: { Promotion, Category },
+  components: { Promotion, Category, Menu, Product },
 
   data() {
     return {
@@ -15,21 +18,20 @@ export default {
 
   computed: {
     ...mapState(useProductStore, {
-      popularProducts: 'getPopularProducts',
+      promotions: 'promotions',
+
       categories(store) {
         return store.getCategoriesByGroup(this.currentGroupName)
       },
-      promotions(store) {
-        return store.promotions
-      }
-      productsByCategory(store) {
-        return store.getProductsByCategory(this.currentCategoryId)
-      }
+
       productsByGroup(store) {
         return store.getProductsByGroup(this.currentGroupName)
-      }
+      },
+
+      popularProducts: 'getPopularProducts'
     })
   },
+
   mounted() {
     const store = useProductStore()
     store.loadAll()
@@ -39,6 +41,9 @@ export default {
 
 <template>
   <div>
+    <Menu title="Featured Categories"></Menu>
+
+    <!-- CATEGORY LIST -->
     <h2>Categories</h2>
     <div class="category">
       <Category
@@ -48,6 +53,7 @@ export default {
       />
     </div>
 
+    <!-- PROMOTION LIST -->
     <h2>Promotions</h2>
     <div class="promotion">
       <Promotion
@@ -56,24 +62,27 @@ export default {
         :promotion="promotion"
       />
     </div>
+    <Menu title="Popular Products"></Menu>
+    <!-- PRODUCTS LIST -->
 
-    <h2>Popular Products</h2>
-    <div class="promotion">
-      <Promotion
+    <div class="products">
+      <Product
         v-for="product in popularProducts"
         :key="product.id"
-        :promotion="product"
+        v-bind="product"
       />
     </div>
   </div>
 </template>
 
 <style scoped>
-.category, .promotion { 
+.category,
+.promotion,
+.products {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 12px;
 }
 </style>
