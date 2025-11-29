@@ -1,15 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '../App.vue'
+import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'app',
-      component: App
-    }
-  ]
-})
+      name: "home",
+      component: HomeView
+    },
+    {
+      path: "/categories/:categoryId",
+      name: "category",
+      component: HomeView,
+    },
+    {
+      path: "/products/:productId",
+      name: "product",
+      component: () => import("../views/ProductView.vue"),
+    },
+  ],
+});
 
-export default router
+export default router;

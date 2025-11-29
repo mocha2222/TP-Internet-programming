@@ -52,8 +52,22 @@
 </template>
 
 <script>
+function fixImagePath(raw) {
+  if (!raw) return "";
+
+  try {
+    const arr = JSON.parse(raw);          // parse string like '["uploads\\product\\xxx.png"]'
+    let path = arr[0] || "";
+    path = path.replace(/\\/g, "/");      // convert backslashes to forward slashes
+    return path;
+  } catch (e) {
+    return "";
+  }
+}
+
 export default {
-  name: 'ProductCard',
+  name: "ProductCard",
+
   props: {
     id: Number,
     productId: [String, Number],
@@ -73,32 +87,36 @@ export default {
 
   computed: {
     fullStars() {
-      return Math.floor(this.rating)
+      return Math.floor(this.rating);
     },
+
     hasHalfStar() {
-      return this.rating % 1 >= 0.5
+      return this.rating % 1 >= 0.5;
     },
+
     currentPrice() {
       if (this.promotionAsPercentage > 0) {
-        const discounted = this.price - (this.price * this.promotionAsPercentage / 100)
-        return discounted.toFixed(2)
+        const d = this.price - (this.price * this.promotionAsPercentage) / 100;
+        return d.toFixed(2);
       }
-      return this.price.toFixed(2)
+      return this.price.toFixed(2);
     },
+
     imageUrl() {
       if (this.image instanceof File) {
-        return URL.createObjectURL(this.image)
+        return URL.createObjectURL(this.image);
       }
-      return this.image
+      const cleanPath = fixImagePath(this.image);
+      return `http://localhost:3000/${cleanPath}`; // Add your backend URL here
     }
   },
 
   beforeUnmount() {
     if (this.image instanceof File && this.imageUrl) {
-      URL.revokeObjectURL(this.imageUrl)
+      URL.revokeObjectURL(this.imageUrl);
     }
   }
-}
+};
 </script>
 
 <style scoped>
