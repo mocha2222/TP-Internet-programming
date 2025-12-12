@@ -1,37 +1,62 @@
 <template>
-    <div class="newsletter-container">
+    <div class="showcase-container">
         <div class="content-left">
-            <h2>Don't miss amazing grocery deals</h2>
+            <h2>Don't miss amazing<br>grocery deals</h2>
             <p>Sign up for the daily newsletter</p>
             <div class="email-form">
                 <span class="input-wrapper">
-                    <img src="./img/airplane.png" alt="" class="icon">
-                    <input type="email" placeholder="Your email address">
+                    <img src="/img/paper-plane.png" alt="plane icon" class="icon">
+                    <input type="email" placeholder="Your email address" v-model="email">
                 </span>
-                <button class="subscribe-btn">
+                <button class="subscribe-btn" @click="handleSubscribe">
                     Subscribe
                 </button>
             </div>
         </div>
         <div class="content-right">
-            <img src="../public/img/apple.png" alt="" class="apple-image">
+            <img src="/img/apple.jpg" alt="" class="apple-image">
         </div>
     </div>
 </template>
 
+<script>
+export default {
+    name: 'ShowcaseComponent',
+    data() {
+        return {
+            email: ''
+        }
+    },
+    methods: {
+        handleSubscribe() {
+            if (this.email) {
+                console.log('Subscribing email:', this.email);
+                // Add your subscription logic here
+            }
+        }
+    }
+}
+</script>
+
 <style scoped>
-.newsletter-container {
+
+.showcase-container {
     position: relative;
     width: 100%;
-    min-height: 500px;
-    background-image: url('../public/img/bg-apple.png');
-    background-size: cover;
+    max-width: 100%;
+    height: auto;
+    background: #fde5c6;
+    /* background-image: url('/img/bg-apple.jpg'); */
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 4rem 6rem;
+    justify-content: space-evenly;
+    padding: 3rem 3rem;
     overflow: hidden;
+    border-radius: 12px;
+    box-sizing: border-box;
 }
 
 .content-left {
@@ -41,17 +66,19 @@
 }
 
 .content-left h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 700;
-    color: #1e293b;
+    color: #1e3a5f;
     margin-bottom: 1rem;
     line-height: 1.2;
+    letter-spacing: -0.01em;
 }
 
 .content-left p {
-    font-size: 1.25rem;
-    color: #6b7280;
+    font-size: 1rem;
+    color: #8b9199;
     margin-bottom: 2rem;
+    font-weight: 400;
 }
 
 .email-form {
@@ -75,6 +102,7 @@
     width: 20px;
     height: 20px;
     margin-right: 0.75rem;
+    flex-shrink: 0;
 }
 
 .input-wrapper input {
@@ -118,14 +146,15 @@
 }
 
 .apple-image {
-    max-width: 450px;
+    max-width: 350px;
     width: 100%;
     height: auto;
     object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 
 @media (max-width: 768px) {
-    .newsletter-container {
+    .showcase-container {
         flex-direction: column;
         padding: 2rem;
         text-align: center;
@@ -137,7 +166,7 @@
     }
     
     .content-left h2 {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
     .email-form {
@@ -149,26 +178,7 @@
     }
     
     .apple-image {
-        max-width: 300px;
+        max-width: 250px;
     }
 }
 </style>
-
-<script>
-export default {
-    name: 'GroceryNewsletter',
-    data() {
-        return {
-            email: ''
-        }
-    },
-    methods: {
-        handleSubscribe() {
-            if (this.email) {
-                console.log('Subscribing email:', this.email);
-                // Add your subscription logic here
-            }
-        }
-    }
-}
-</script>

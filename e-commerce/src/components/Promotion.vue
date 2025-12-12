@@ -1,52 +1,101 @@
 <template>
-  <div class="catCard" :style="{ backgroundColor: category.color }">
-    <img class="catImg" :src="imageUrl" :alt="category.name">
-    <h3 class="catName">{{ category.name }}</h3>
-    <p class="catQuant">{{ category.productCount }} items</p>
+  <div class="promotion-banner" :style="{ backgroundColor: promotion.color }">
+    <div class="text-wrapper">
+      <h2>{{ promotion.title }}</h2>
+      <Button 
+        :style="{ backgroundColor: promotion.buttonColor }" 
+        @click="shopNow(promotion)"
+      >
+        Shop Now
+      </Button>
+    </div>
+
+    <div class="image-wrapper">
+      <img :src="fixedImageUrl" :alt="promotion.title">
+    </div>
   </div>
 </template>
 
 <script>
+import Button from './Button.vue'
+
 export default {
+  components: { Button },
   props: {
-    category: {
+    promotion: {
       type: Object,
       required: true
     }
   },
+
   computed: {
-    imageUrl() {
-      if (this.category.image instanceof File || this.category.image instanceof Blob) {
-        return URL.createObjectURL(this.category.image)
-      }
-      return this.category.image
+    fixedImageUrl() {
+      if (!this.promotion?.image) return ''
+      return `http://localhost:3000/${this.promotion.image.replace(/\\/g, '/')}`
+    }
+  },
+
+  methods: {
+    shopNow(promotion) {
+      alert("Let's shop: " + promotion.title)
     }
   }
 }
 </script>
 
 <style scoped>
-.catCard {
-  width: 136px;
-  height: 167px;
-  border-radius: 10px;
+.promotion-banner {
+  width: 30%;                   
+  height: 240px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  padding: 0 40px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
+  background: #fff;
 }
-.catImg {
+
+.promotion-banner:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+.text-wrapper {
+  max-width: 55%;
+  z-index: 2;
+}
+
+.text-wrapper h2 {
+  font-size: 20px;           
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 24px 0;
+  color: #222;
+}
+
+.image-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
   width: 50%;
-  height: 50%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px 40px 20px 0;
+  pointer-events: none;
+}
+
+.image-wrapper img {
+  height: 70%;              
+  width: auto;
   object-fit: contain;
 }
-.catName {
-  font-size: 14px;
-  font-weight: 600;
-}
-.catQuant {
-  font-size: 12px;
-  color: #777;
+
+.promotion-banner:not(:first-child) .text-wrapper h2 {
+  font-size: 22px;         
 }
 </style>

@@ -3,7 +3,6 @@ import Promotion from '../components/Promotion.vue'
 import Category from '../components/Category.vue'
 import Menu from '../components/Menu.vue'
 import Product from '../components/Product.vue'
-
 import { useProductStore } from '@/store/useProductStore'
 import { mapState } from 'pinia'
 import ShowCase from '../components/ShowCase.vue'
@@ -20,11 +19,12 @@ export default {
 
   computed: {
     ...mapState(useProductStore, {
-      promotions: 'promotions',
+      promotions: 'getPromotions',
+      categories: 'getCategories',
 
-      categories(store) {
-        return store.getCategoriesByGroup(this.currentGroupName)
-      },
+      // categories(store) {
+      //   return store.getCategoriesByGroup(this.currentGroupName)
+      // },
 
       productsByGroup(store) {
         return store.getProductsByGroup(this.currentGroupName)
@@ -48,24 +48,25 @@ export default {
     <Menu title="Featured Categories"></Menu>
 
     <!-- CATEGORY LIST -->
-    <h2>Categories</h2>
-    <div class="category">
-      <Category
-        v-for="category in categories"
-        :key="category.id"
-        :category="category"
-      />
-    </div>
-
+    <router-link to="/Products">
+      <div class="category">
+        <Category
+          v-for="category in categories"
+          :key="category.id"
+          :category="category"
+        />
+      </div>
+    </router-link>
     <!-- PROMOTION LIST -->
-    <h2>Promotions</h2>
-    <div class="promotion">
-      <Promotion
-        v-for="promotion in promotions"
-        :key="promotion.id"
-        :promotion="promotion"
-      />
-    </div>
+     <router-link to="/Products">
+      <div class="promotion">
+        <Promotion
+          v-for="promotion in promotions"
+          :key="promotion.id"
+          :promotion="promotion"
+        />
+      </div>
+    </router-link>
     <Menu title="Popular Products"></Menu>
     <!-- PRODUCTS LIST -->
 

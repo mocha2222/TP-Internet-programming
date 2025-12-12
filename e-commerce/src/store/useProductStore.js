@@ -11,7 +11,13 @@ export const useProductStore = defineStore('product', {
 
   getters: {
     getCategoriesByGroup: (state) => {
-      return (groupName) => state.categories.filter(c => c.group === groupName)
+      return (groupName) => state.categories.filter(c => c.name === groupName)
+    },
+    getCategories: (state) => {
+      return state.categories
+    },
+    getPromotions: (state) => {
+      return state.promotions
     },
     getProductsByGroup: (state) => {
       return (groupName) => state.products.filter(p => p.group === groupName)
